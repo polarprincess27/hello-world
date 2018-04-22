@@ -1,0 +1,9 @@
+=QUERY({QUERY('tabname'!A2:AE100,"select A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD LIMIT x");QUERY('tabname'!A2:AE250,"select A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD LIMIT x");QUERY('tabname'!A2:AE250,"select A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD LIMIT x")},)
+
+'tabname' is the exact name used on the tab that holds the data
+LIMIT x = x is the numberical value describing the populated row count of each sheet
+select statement should contain the named column reference for each applicable column you need as part of the report
+
+Pre-requisite: You have consolidated all individual data entry sheets into one Google Sheet using the Import feature. Each entry sheet is represented on a tab. The tab is named with the unique identified that describes the entitity (Cost Center ID)
+
+Output: One Tab (Merge Map) that gives a raw consolidation of all inputs in one single view
