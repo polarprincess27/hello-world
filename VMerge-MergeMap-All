@@ -1,0 +1,57 @@
+
+Pre-requisite: 
+You have decided on a single template to apply for all input sheets. 
+You have decided what the unique identifier is for each sheet. We will use COST CENTER NUMBER (numeric).
+Using a Numeric value as identifier simplifies formula entries, allowing numeric operators.
+You have created each of the input sheets from the same template.
+
+CREATE A CONSOLIDATED VIEW OF ALL BUDGET ENTRIES
+Step 1: Created a Google Sheet named <VMERGE>.
+Step 2A: Rename one tab MERGEMAP
+Step 2B: Rename one tab VMERGE (create a new tab if you need to)
+Step 3: Create one tab for each of the input sheets, naming each tab with the appropiate COST CENTER NUMBER.
+Step 4: For each tab, repeat action 4A - 4E:
+Step 4A: Verify that the Tab name matches the COST CENTER NUMBER
+Step 4B: Open the INPUT SHEET for the COST CENTER NUMBER you want to capture. Copy the document reference (URL)
+Step 4C: In cell A1 type =IMPORTRANGE("'<PASTE URL FOR COST CENTER NUMBER>',<'DATA'>!<DATA RANGE>")
+Step 4D: Hit enter
+Step 4E: Data from INPUT SHEET will render. Click "Allow Access" if you get an Access Error.
+
+You have now successfully created links to all individual data entry sheets into one Google Sheet named VMERGE. 
+Each data entry sheet is represented on a separate tab. You can click through the tabs to see the available data for each one.
+INPUT SHEETS are now linked to the CONSOLIDATED VIEW, which will update as you input sheets change.
+
+NEXT, we want to create a view that provides the raw consolidation of all the input tabs in one single view.
+Output: MERGEMAP tab
+
+Step 5: Access the tab MERGEMAP from step 1
+Step 6: In cell A1 enter the following:
+=QUERY({QUERY('tabname'!A2:AE100,"select A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD LIMIT x");QUERY('tabname'!A2:AE250,"select A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD LIMIT x");QUERY('tabname'!A2:AE250,"select A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD LIMIT x")},)
+
+'tabname' is the exact name used on the tab that holds the data (in our case COST CENTER NAME)
+Start your cell reference in row 2 to avoid the column header.
+End you cell reference in the right most column of your input sheet, and allow enough rows to cover the likely amount of entries.
+LIMIT x = x is the numberical value describing the populated row count of each sheet (enter an integer larger than or equal to total expected budget line entries). Note - keep it close, to limit the total size of the MERGEMAP.
+Your SELECT statement should contain each of the named column reference for each applicable column you need from the INPUT TEMPLATE you created.
+Insert as many QUERY() clauses you need, until you have one for each of the input sheets.
+Step 7: Hit enter.
+
+The final output will be a raw listing of all the data from all the linked sheets, minus the column headers.
+You now have a fully populated MERGEMAP tab
+
+FINALLY, we want to clean up the data, removing any blank lines between entries. 
+The output of this action is the tab you will reference when running reports.
+Output: VMERGE tab
+
+Step 8: Copy the Column header structure from your DATA INPUT SHEET into Row 1
+In our example we have COST CENTER NUMBERS in Column A, and ACCOUNT CODES in Column B.
+These two fields are only filled in for lines with valid data, thus can be used to determine if a line should be pulled in.
+The first two rows of each INPUT SHEET contains column headers, so we will start the data pull in Row 3
+
+Step 9: In cell A2 enter the following: 
+=QUERY('MERGEMAP'!A3:AE9048,"where (A>=LOWEST COST CENTER NUMBER) and (B>1)")
+Step 10: Hit enter
+
+The sheet should now populate with all available data, omitting any blank lines.
+
+The data on the VMERGE tab is the full data set you will reference in your reports and dashboards.
